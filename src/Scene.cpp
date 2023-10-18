@@ -61,15 +61,8 @@ void Scene::run()
         glClearColor(0.07f, 0.13f, 0.17f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        glUseProgram(shaderProgram1.getId());
-        drawableObject1.transform(glm::translate(model, glm::vec3(0.6f, 0.0f, 0.0f)));
-        drawableObject1.transform(glm::rotate(drawableObject1.getModel(), glm::radians(angle), glm::vec3(1.0f, 0.0f, 0.5f)));
-        drawableObject1.render();
-
-        glUseProgram(shaderProgram2.getId());
-        drawableObject2.transform(glm::translate(model2, glm::vec3(-0.6f, 0.0f, 0.0f)));
-        drawableObject2.transform(glm::rotate(drawableObject2.getModel(), glm::radians(angle), glm::vec3(1.0f, 0.0f, 0.5f)));
-        drawableObject2.render();
+        drawObject(shaderProgram1, drawableObject1, model, angle, glm::vec3(0.6f, 0.0f, 0.0f));
+        drawObject(shaderProgram2, drawableObject2, model2, angle, glm::vec3(-0.6f, 0.0f, 0.0f));
 
         angle += 0.5f;
         glfwSwapBuffers(window);
@@ -148,3 +141,12 @@ void Scene::clean()
     glfwDestroyWindow(window);
     glfwTerminate();
 }
+
+void Scene::drawObject(ShaderProgram shaderProgram, DrawableObject object, glm::mat4 model,
+                       GLfloat angle, glm::vec3 translationVector)
+{
+    glUseProgram(shaderProgram.getId());
+    object.transform(glm::translate(model, translationVector));
+    object.transform(glm::rotate(object.getModel(), glm::radians(angle), glm::vec3(1.0f, 0.0f, 0.5f)));
+    object.render();
+};
