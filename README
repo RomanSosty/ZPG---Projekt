@@ -1,0 +1,2 @@
+Program lze vytvoři pomocí souboru Makefile, který je uložen v adresáři bin.
+Po spuštění příkazu make se vytvoří spustitelný soubor main v adresáři bin.
