@@ -9,14 +9,15 @@ class DrawableObject
 public:
     void initDrawableObject(GLuint shaderProgram, glm::mat4 model);
     void initModel(GLfloat points[], GLuint indices[], int numPoints, int numIndices);
-    void transform(const glm::mat4 &newModel);
+    void translate(glm::vec3 translationVector);
+    void rotate(GLfloat angle, glm::vec3 translationVector);
     void render();
     glm::mat4 getModel();
 
 private:
     GLuint shaderProgram;
     Model modelClass;
-    // Transformation transformation;
+    Transformation transformation;
     glm::mat4 model;
 };
 #endif

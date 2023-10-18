@@ -61,8 +61,8 @@ void Scene::run()
         glClearColor(0.07f, 0.13f, 0.17f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        drawObject(shaderProgram1, drawableObject1, model, angle, glm::vec3(0.6f, 0.0f, 0.0f));
-        drawObject(shaderProgram2, drawableObject2, model2, angle, glm::vec3(-0.6f, 0.0f, 0.0f));
+        drawObject(shaderProgram1, drawableObject1, angle, glm::vec3(0.6f, 0.0f, 0.0f));
+        drawObject(shaderProgram2, drawableObject2, angle, glm::vec3(-0.6f, 0.0f, 0.0f));
 
         angle += 0.5f;
         glfwSwapBuffers(window);
@@ -142,11 +142,11 @@ void Scene::clean()
     glfwTerminate();
 }
 
-void Scene::drawObject(ShaderProgram shaderProgram, DrawableObject object, glm::mat4 model,
+void Scene::drawObject(ShaderProgram shaderProgram, DrawableObject object,
                        GLfloat angle, glm::vec3 translationVector)
 {
     glUseProgram(shaderProgram.getId());
-    object.transform(glm::translate(model, translationVector));
-    object.transform(glm::rotate(object.getModel(), glm::radians(angle), glm::vec3(1.0f, 0.0f, 0.5f)));
+    object.translate(translationVector);
+    object.rotate(angle, translationVector);
     object.render();
 };

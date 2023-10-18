@@ -51,7 +51,7 @@ private:
     bool initWindow();
     void initObjects();
     void initGeometry();
-    void drawObject(ShaderProgram shaderProgram, DrawableObject object, glm::mat4 model,
+    void drawObject(ShaderProgram shaderProgram, DrawableObject object,
                     GLfloat angle, glm::vec3 translationVector);
 
     GLFWwindow *window;

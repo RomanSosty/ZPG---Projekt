@@ -1,4 +1,4 @@
-#ifdef TRANSFORMATION_H
+#ifndef TRANSFORMATION_H
 #define TRANSFORMATION_H
 
 #include "../include/GL/glew.h"
@@ -12,7 +12,11 @@
 class Transformation
 {
 public:
+    const glm::mat4 translate(glm::mat4 model, glm::vec3 translationVector);
+    const glm::mat4 rotate(glm::mat4 model, GLfloat angle, glm::vec3 translationVector);
+
 private:
+    glm::mat4 model;
 };
 
 #endif

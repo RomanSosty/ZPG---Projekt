@@ -19,9 +19,14 @@ void DrawableObject::initModel(GLfloat points[], GLuint indices[], int numPoints
     modelClass.initModel(points, indices, numPoints, numIndices);
 }
 
-void DrawableObject::transform(const glm::mat4 &newModel)
+void DrawableObject::translate(glm::vec3 translationVector)
 {
-    model = newModel;
+    this->model = transformation.translate(this->model, translationVector);
+}
+
+void DrawableObject::rotate(GLfloat angle, glm::vec3 translationVector)
+{
+    this->model = transformation.rotate(this->model, angle, translationVector);
 }
 
 glm::mat4 DrawableObject::getModel()
