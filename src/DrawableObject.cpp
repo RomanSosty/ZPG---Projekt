@@ -1,6 +1,6 @@
 #include "../include/DrawableObject.h"
 
-DrawableObject::DrawableObject(GLuint shaderProgram, glm::mat4 model)
+void DrawableObject::initDrawableObject(GLuint shaderProgram, glm::mat4 model)
 {
     this->shaderProgram = shaderProgram;
     this->model = model;

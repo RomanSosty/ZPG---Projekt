@@ -4,7 +4,7 @@
 class DrawableObject
 {
 public:
-    DrawableObject(GLuint shaderProgram, glm::mat4 model);
+    void initDrawableObject(GLuint shaderProgram, glm::mat4 model);
     void initModel(GLfloat points[], GLuint indices[], int numPoints, int numIndices);
     void transform(const glm::mat4 &newModel);
     void render();

@@ -1,21 +1,21 @@
 #include "../include/Shader.h"
 
-const char *Shader::getFragmetShader()
+GLuint Shader::createShader(GLenum shaderType, const char *source)
 {
-    return this->fragment_shader_src;
-}
+    GLuint shader = glCreateShader(shaderType);
+    glShaderSource(shader, 1, &source, NULL);
+    glCompileShader(shader);
 
-const char *Shader::getVertexShader()
-{
-    return this->vertex_shader_src;
-}
-
-void Shader::setFragmentShader(const char *fragment_shader_src)
-{
-    this->fragment_shader_src = fragment_shader_src;
-}
-
-void Shader::setVertexShader(const char *vertex_shader_src)
-{
-    this->vertex_shader_src = vertex_shader_src;
+    GLint compileStatus;
+    glGetShaderiv(shader, GL_COMPILE_STATUS, &compileStatus);
+    if (compileStatus != GL_TRUE)
+    {
+        GLint logLength;
+        glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &logLength);
+        char *logInfo = new char[logLength];
+        glGetShaderInfoLog(shader, logLength, nullptr, logInfo);
+        printf("Shader compilation failed: %s", logInfo);
+        delete[] logInfo;
+    }
+    return shader;
 }

@@ -2,7 +2,6 @@
 
 void Model::initModel(GLfloat points[], GLuint indices[], int numPoints, int numIndices)
 {
-
     glGenVertexArrays(1, &this->vao);
     glGenBuffers(1, &this->vbo);
     glGenBuffers(1, &this->ebo);
