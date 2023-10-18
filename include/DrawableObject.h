@@ -1,3 +1,6 @@
+#ifndef DRAWABLEOBJECT_H
+#define DRAWABLEOBJECT_H
+
 #include "../include/Model.h"
 #include "../include/Transformation.h"
 
@@ -13,6 +16,7 @@ public:
 private:
     GLuint shaderProgram;
     Model modelClass;
-    Transformation transformation;
+    // Transformation transformation;
     glm::mat4 model;
 };
+#endif

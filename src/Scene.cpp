@@ -1,37 +1,5 @@
+
 #include "../include/Scene.h"
-
-const char *fragment_shader_src1 =
-    "#version 330\n"
-    "in vec3 fragColor;"
-    "out vec4 frag_colour;"
-    "void main () {"
-    "     frag_colour = vec4 (fragColor, 1.0);"
-    "}";
-
-const char *vertex_shader_src1 =
-    "#version 330\n"
-    "layout(location=0) in vec3 vp;"
-    "out vec3 fragColor;"
-    "uniform mat4 model;"
-    "void main () {"
-    "     gl_Position = model * vec4(vp, 1.0);"
-    "     fragColor = vp;"
-    "}";
-
-const char *fragment_shader_src2 =
-    "#version 330\n"
-    "out vec4 frag_colour;"
-    "void main () {"
-    "     frag_colour = vec4 (1.0, 1.0, 0.2, 1.0);"
-    "}";
-
-const char *vertex_shader_src2 =
-    "#version 330\n"
-    "layout(location=0) in vec3 vp;"
-    "uniform mat4 model;"
-    "void main () {"
-    "     gl_Position = model * vec4(vp, 1.0);"
-    "}";
 
 Scene::Scene()
 {

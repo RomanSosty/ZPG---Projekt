@@ -1,3 +1,6 @@
+#ifdef TRANSFORMATION_H
+#define TRANSFORMATION_H
+
 #include "../include/GL/glew.h"
 #include "../include/GLFW/glfw3.h"
 #include "glm/vec3.hpp"
@@ -11,3 +14,5 @@ class Transformation
 public:
 private:
 };
+
+#endif

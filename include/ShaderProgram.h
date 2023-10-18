@@ -1,3 +1,6 @@
+#ifndef SHADERPROGRAM_H
+#define SHADERPROGRAM_H
+
 #include "../include/Shader.h"
 
 class ShaderProgram
@@ -10,3 +13,4 @@ public:
 private:
     GLuint id;
 };
+#endif
