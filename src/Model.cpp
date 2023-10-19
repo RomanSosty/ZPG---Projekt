@@ -15,10 +15,6 @@ void Model::initModel(GLfloat points[], GLuint indices[], int numPoints, int num
 
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), nullptr);
     glEnableVertexAttribArray(0);
-
-    // glm::mat4 projection = glm::ortho(-ratio, ratio, -1.0f, 1.0f, 1.0f, -1.0f);
-    // GLuint projectionLoc = glGetUniformLocation(shaderProgram, "model");
-    // glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(projection));
 }
 
 GLuint Model::getVao()

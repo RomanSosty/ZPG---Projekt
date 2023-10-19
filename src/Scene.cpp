@@ -45,9 +45,7 @@ bool Scene::initWindow()
         return false;
     }
 
-    int width, height;
     glfwGetFramebufferSize(window, &width, &height);
-    float ratio = width / static_cast<float>(height);
     glViewport(0, 0, width, height);
     return true;
 }
@@ -58,8 +56,13 @@ void Scene::run()
 
     while (!glfwWindowShouldClose(window))
     {
+        processInput(window);
+
         glClearColor(0.07f, 0.13f, 0.17f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+        view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
+        projection = glm::perspective(glm::radians(45.0f), static_cast<float>(width) / static_cast<float>(height), 0.1f, 100.0f);
 
         drawObject(shaderProgram1, drawableObject1, angle, glm::vec3(0.6f, 0.0f, 0.0f));
         drawObject(shaderProgram2, drawableObject2, angle, glm::vec3(-0.6f, 0.0f, 0.0f));
@@ -74,7 +77,7 @@ void Scene::initObjects()
 {
     shaderProgram1.setId();
     shaderProgram2.setId();
-    shaderProgram1.setShader(fragment_shader_src1, vertex_shader_src1);
+    shaderProgram1.setShader(fragment_shader_src, vertex_shader_src);
     shaderProgram2.setShader(fragment_shader_src2, vertex_shader_src2);
 
     model = glm::mat4(1.0f);
@@ -136,6 +139,7 @@ void Scene::initGeometry()
 
 void Scene::clean()
 {
+    glBindVertexArray(0);
     glDeleteProgram(shaderProgram1.getId());
     glDeleteProgram(shaderProgram2.getId());
     glfwDestroyWindow(window);
@@ -148,5 +152,17 @@ void Scene::drawObject(ShaderProgram shaderProgram, DrawableObject object,
     glUseProgram(shaderProgram.getId());
     object.translate(translationVector);
     object.rotate(angle, translationVector);
-    object.render();
+    object.render(view, projection);
 };
+
+void Scene::processInput(GLFWwindow *window)
+{
+    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+        cameraPos += cameraSpeed * cameraFront;
+    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+        cameraPos -= cameraSpeed * cameraFront;
+    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+        cameraPos -= glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
+    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+        cameraPos += glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
+}
