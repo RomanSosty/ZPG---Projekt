@@ -57,14 +57,18 @@ void Scene::run()
     while (!glfwWindowShouldClose(window))
     {
         processInput(window);
+        glEnable(GL_DEPTH_TEST);
 
         glClearColor(0.07f, 0.13f, 0.17f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
         projection = glm::perspective(glm::radians(45.0f), static_cast<float>(width) / static_cast<float>(height), 0.1f, 100.0f);
+        for (int i = 0; i < 10; i++)
+        {
+            drawObject(shaderProgram1, drawableObject1, angle, glm::vec3(0.6f + i, 0.0f, 0.0f));
+        }
 
-        drawObject(shaderProgram1, drawableObject1, angle, glm::vec3(0.6f, 0.0f, 0.0f));
         drawObject(shaderProgram2, drawableObject2, angle, glm::vec3(-0.6f, 0.0f, 0.0f));
 
         angle += 0.5f;
