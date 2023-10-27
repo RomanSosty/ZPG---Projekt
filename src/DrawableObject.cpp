@@ -1,41 +1,23 @@
 #include "../include/DrawableObject.h"
 
-void DrawableObject::initDrawableObject(GLuint shaderProgram, glm::mat4 model)
+void DrawableObject::initDrawableObject(ShaderProgram shaderProgram)
 {
     this->shaderProgram = shaderProgram;
-    this->model = model;
+    glUseProgram(shaderProgram.getId());
+    glBindVertexArray(model.getVao());
 }
 
-void DrawableObject::render(glm::mat4 view, glm::mat4 projection)
+void DrawableObject::draw()
 {
-    GLuint viewLocation = glGetUniformLocation(shaderProgram, "view");
-    GLuint modelLoc = glGetUniformLocation(shaderProgram, "model");
-    GLuint projectionLoc = glGetUniformLocation(shaderProgram, "projection");
-
-    glUniformMatrix4fv(viewLocation, 1, GL_FALSE, glm::value_ptr(view));
-    glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(projection));
-
-    glBindVertexArray(modelClass.getVao());
-    glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-    glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
-};
-
-void DrawableObject::initModel(GLfloat points[], GLuint indices[], int numPoints, int numIndices)
-{
-    modelClass.initModel(points, indices, numPoints, numIndices);
+    glDrawArrays(GL_TRIANGLES, 0, 2880);
 }
 
-void DrawableObject::translate(glm::vec3 translationVector)
+void DrawableObject::initModel(const float points[], int pointsNumber)
 {
-    this->model = transformation.translate(this->model, translationVector);
+    model.initModel(points, pointsNumber);
 }
 
-void DrawableObject::rotate(GLfloat angle, glm::vec3 translationVector)
+Transformation DrawableObject::getTransformation()
 {
-    this->model = transformation.rotate(this->model, angle, translationVector);
-}
-
-glm::mat4 DrawableObject::getModel()
-{
-    return this->model;
+    return transformation;
 }

@@ -3,21 +3,19 @@
 
 #include "../include/Model.h"
 #include "../include/Transformation.h"
+#include "../include/ShaderProgram.h"
 
 class DrawableObject
 {
 public:
-    void initDrawableObject(GLuint shaderProgram, glm::mat4 model);
-    void initModel(GLfloat points[], GLuint indices[], int numPoints, int numIndices);
-    void translate(glm::vec3 translationVector);
-    void rotate(GLfloat angle, glm::vec3 translationVector);
-    void render(glm::mat4 view, glm::mat4 projection);
-    glm::mat4 getModel();
+    void initDrawableObject(ShaderProgram shaderProgram);
+    void draw();
+    void initModel(const float sphere[], int pointsNumber);
+    Transformation getTransformation();
 
 private:
-    GLuint shaderProgram;
-    Model modelClass;
+    Model model;
     Transformation transformation;
-    glm::mat4 model;
+    ShaderProgram shaderProgram;
 };
 #endif

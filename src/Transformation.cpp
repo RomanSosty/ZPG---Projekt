@@ -1,13 +1,17 @@
 #include "../include/Transformation.h"
 
-const glm::mat4 Transformation::translate(glm::mat4 model, glm::vec3 translationVector)
+void Transformation::transform(GLuint shaderProgram, glm::vec3 translationVector, float angle)
 {
-    this->model = glm::translate(model, translationVector);
-    return this->model;
-}
+    M = glm::rotate(glm::mat4(1.0f), angle, glm::vec3(0.0f, 0.0f, 1.0f));
+    M = glm::translate(M, translationVector);
+    matrixID = glGetUniformLocation(shaderProgram, "model");
+    glUniformMatrix4fv(matrixID, 1, GL_FALSE, glm::value_ptr(M));
 
-const glm::mat4 Transformation::rotate(glm::mat4 model, GLfloat angle, glm::vec3 translationVector)
-{
-    this->model = glm::rotate(model, glm::radians(angle), translationVector);
-    return this->model;
+    M = glm::lookAt(glm::vec3(5.0f, 0.0f, 0.0f), glm::vec3(0.f, 0.f, 0.f), glm::vec3(0.f, 1.f, 0.f));
+    matrixID = glGetUniformLocation(shaderProgram, "view");
+    glUniformMatrix4fv(matrixID, 1, GL_FALSE, glm::value_ptr(M));
+
+    M = glm::perspective(45.0f, 800.f / 600.f, 0.1f, 100.0f);
+    matrixID = glGetUniformLocation(shaderProgram, "project");
+    glUniformMatrix4fv(matrixID, 1, GL_FALSE, glm::value_ptr(M));
 }

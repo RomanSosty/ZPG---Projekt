@@ -6,11 +6,14 @@
 class ShaderProgram
 {
 public:
-    void setShader(const char *fragment_shader_src, const char *vertex_shader_src);
     GLuint getId();
+    void setShaders();
+    void createShaders();
     void setId();
 
 private:
     GLuint id;
+    GLuint fragmentShader;
+    GLuint vertexShader;
 };
 #endif

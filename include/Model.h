@@ -12,12 +12,12 @@
 class Model
 {
 public:
-    void initModel(GLfloat points[], GLuint indices[], int numPoints, int numIndices);
+    void initModel(const float points[], int pointsNumber);
     GLuint getVao();
     GLuint getVbo();
 
 private:
-    GLuint vao, vbo, ebo;
+    GLuint vao, vbo;
 };
 
 #endif
