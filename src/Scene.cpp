@@ -76,18 +76,22 @@ void Scene::run()
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         drawableObject.initDrawableObject(shaderProgram);
+        initLight();
         drawableObject.getTransformation().transform(shaderProgram.getId(), glm::vec3(0.0f, 0.0f, -2.f), angle);
         drawableObject.draw();
 
         drawableObject.initDrawableObject(shaderProgram);
+        initLight();
         drawableObject.getTransformation().transform(shaderProgram.getId(), glm::vec3(0.0f, 0.0f, 2.f), 0);
         drawableObject.draw();
 
         drawableObject.initDrawableObject(shaderProgram);
+        initLight();
         drawableObject.getTransformation().transform(shaderProgram.getId(), glm::vec3(0.0f, 2.0f, 0.f), 0);
         drawableObject.draw();
 
         drawableObject.initDrawableObject(shaderProgram);
+        initLight();
         drawableObject.getTransformation().transform(shaderProgram.getId(), glm::vec3(0.0f, -2.0f, 0.f), 0);
         drawableObject.draw();
 
@@ -96,6 +100,22 @@ void Scene::run()
         glfwSwapBuffers(window);
     }
 };
+
+void Scene::initLight()
+{ // Získání umístění uniformních proměnných
+    int lightPosLoc = glGetUniformLocation(shaderProgram.getId(), "lightPos");
+    int lightColorLoc = glGetUniformLocation(shaderProgram.getId(), "lightColor");
+    int objectColorLoc = glGetUniformLocation(shaderProgram.getId(), "objectColor");
+
+    // Nastavení hodnot uniformních proměnných
+    glm::vec3 lightPos = glm::vec3(0.0f, 0.0f, 0.0f);
+    glm::vec3 lightColor = glm::vec3(1.0f, 1.0f, 1.0f);
+    glm::vec3 objectColor = glm::vec3(0.5f, 0.5f, 0.5f);
+
+    glUniform3fv(lightPosLoc, 1, glm::value_ptr(lightPos));
+    glUniform3fv(lightColorLoc, 1, glm::value_ptr(lightColor));
+    glUniform3fv(objectColorLoc, 1, glm::value_ptr(objectColor));
+}
 
 void Scene::clean()
 {

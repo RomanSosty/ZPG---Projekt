@@ -7,10 +7,18 @@
 
 static const char *fragment_shader_src =
     "#version 330\n"
-    "in vec3 fragColor;"
+    "in vec3 FragPos;"
+    "in vec3 Normal;"
     "out vec4 frag_colour;"
+    "uniform vec3 lightPos;"
+    "uniform vec3 lightColor;"
+    "uniform vec3 objectColor;"
     "void main () {"
-    "     frag_colour = vec4 (fragColor, 0.0);"
+    "     vec3 lightDir = normalize(lightPos - FragPos);"
+    "     vec3 ambient = 0.1 * objectColor;"
+    "     float diff = max(dot(Normal, lightDir),0.0);"
+    "     vec3 diffuse = diff * lightColor * objectColor;"
+    "     frag_colour = vec4(ambient + diffuse, 1.0);"
     "}";
 
 static const char *vertex_shader_src =
@@ -20,10 +28,12 @@ static const char *vertex_shader_src =
     "uniform mat4 project;"
     "layout(location=0) in vec3 vp;"
     "layout(location=1) in vec3 vn;"
-    "out vec3 fragColor;"
+    "out vec3 FragPos;"
+    "out vec3 Normal;"
     "void main () {"
+    "     FragPos = vec3(model * vec4(vp, 1.0));"
+    "     Normal = mat3(transpose(inverse(model))) * vn;"
     "     gl_Position = project * view * model * vec4(vp, 1.0);"
-    "     fragColor = vp;"
     "}";
 
 class Shader

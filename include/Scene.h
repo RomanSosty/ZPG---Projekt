@@ -18,6 +18,7 @@ private:
     bool initWindow();
     void initShader();
     void initGeometry();
+    void initLight();
 
     GLFWwindow *window;
     ShaderProgram shaderProgram;
