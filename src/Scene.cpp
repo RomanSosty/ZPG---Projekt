@@ -102,19 +102,27 @@ void Scene::run()
 };
 
 void Scene::initLight()
-{ // Získání umístění uniformních proměnných
+{
+
+    // Získání umístění uniformních proměnných
     int lightPosLoc = glGetUniformLocation(shaderProgram.getId(), "lightPos");
     int lightColorLoc = glGetUniformLocation(shaderProgram.getId(), "lightColor");
     int objectColorLoc = glGetUniformLocation(shaderProgram.getId(), "objectColor");
+    int shininessLoc = glGetUniformLocation(shaderProgram.getId(), "shininess");
+    int viewPosLoc = glGetUniformLocation(shaderProgram.getId(), "viewPos");
 
     // Nastavení hodnot uniformních proměnných
     glm::vec3 lightPos = glm::vec3(0.0f, 0.0f, 0.0f);
     glm::vec3 lightColor = glm::vec3(1.0f, 1.0f, 1.0f);
     glm::vec3 objectColor = glm::vec3(0.5f, 0.5f, 0.5f);
+    glm::vec3 cameraPos = glm::vec3(5.0f, 0.0f, 0.f);
+    float shininessValue = 32.0f;
 
     glUniform3fv(lightPosLoc, 1, glm::value_ptr(lightPos));
     glUniform3fv(lightColorLoc, 1, glm::value_ptr(lightColor));
     glUniform3fv(objectColorLoc, 1, glm::value_ptr(objectColor));
+    glUniform1f(shininessLoc, shininessValue);
+    glUniform3fv(viewPosLoc, 1, glm::value_ptr(cameraPos));
 }
 
 void Scene::clean()
