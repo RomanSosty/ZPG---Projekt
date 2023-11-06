@@ -8,14 +8,16 @@
 class DrawableObject
 {
 public:
-    void initDrawableObject(ShaderProgram shaderProgram);
-    void draw();
-    void initModel(const float sphere[], int pointsNumber);
+    void initDrawableObject(ShaderProgram shaderProgram, Model model);
+    void draw(int pointsCount);
+    Model createModel();
     Transformation getTransformation();
+    ShaderProgram getShaderProgram();
+    Model getModel();
 
 private:
-    Model model;
     Transformation transformation;
     ShaderProgram shaderProgram;
+    Model model;
 };
 #endif

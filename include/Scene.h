@@ -11,20 +11,22 @@ class Scene
 {
 public:
     Scene();
-    void clean();
+
+    ShaderProgram createShaderProgram();
+    DrawableObject createDrawableObject();
+
+    void run();
+    void clean(ShaderProgram shaderProgram);
+    void addDrawableObject(DrawableObject drawableObject);
 
 private:
-    void run();
     bool initWindow();
-    void initShader();
-    void initGeometry();
-    void initLight();
+    void initLight(ShaderProgram shaderProgram);
 
     GLFWwindow *window;
-    ShaderProgram shaderProgram;
-
-    DrawableObject drawableObject;
     int width, height;
+
+    std::vector<DrawableObject> drawableObjects;
 };
 
 #endif

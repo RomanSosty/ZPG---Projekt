@@ -12,12 +12,14 @@
 class Model
 {
 public:
-    void initModel(const float points[], int pointsNumber);
+    void initModel(float *points, int pointsCount);
     GLuint getVao();
     GLuint getVbo();
+    int getPointsCount();
 
 private:
     GLuint vao, vbo;
+    int pointsCount;
 };
 
 #endif

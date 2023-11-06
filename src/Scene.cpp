@@ -1,6 +1,5 @@
 
 #include "../include/Scene.h"
-#include "../include/sphere.h"
 
 Scene::Scene()
 {
@@ -9,9 +8,6 @@ Scene::Scene()
         printf("Nepovedlo se inicializovat scénu");
         return;
     }
-    initShader();
-    initGeometry();
-    run();
 };
 
 bool Scene::initWindow()
@@ -51,17 +47,16 @@ bool Scene::initWindow()
     return true;
 }
 
-void Scene::initShader()
+ShaderProgram Scene::createShaderProgram()
 {
-    shaderProgram.createShaders();
-    shaderProgram.setId();
-    shaderProgram.setShaders();
+    ShaderProgram *shaderProgram = new ShaderProgram();
+    return *shaderProgram;
 };
 
-void Scene::initGeometry()
+DrawableObject Scene::createDrawableObject()
 {
-    int pointsNumber = sizeof(sphere) / sizeof(sphere[0]);
-    drawableObject.initModel(sphere, pointsNumber);
+    DrawableObject *drawableObject = new DrawableObject();
+    return *drawableObject;
 }
 
 void Scene::run()
@@ -75,25 +70,13 @@ void Scene::run()
         glClearColor(0.07f, 0.13f, 0.17f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        drawableObject.initDrawableObject(shaderProgram);
-        initLight();
-        drawableObject.getTransformation().transform(shaderProgram.getId(), glm::vec3(0.0f, 0.0f, -2.f), angle);
-        drawableObject.draw();
-
-        drawableObject.initDrawableObject(shaderProgram);
-        initLight();
-        drawableObject.getTransformation().transform(shaderProgram.getId(), glm::vec3(0.0f, 0.0f, 2.f), 0);
-        drawableObject.draw();
-
-        drawableObject.initDrawableObject(shaderProgram);
-        initLight();
-        drawableObject.getTransformation().transform(shaderProgram.getId(), glm::vec3(0.0f, 2.0f, 0.f), 0);
-        drawableObject.draw();
-
-        drawableObject.initDrawableObject(shaderProgram);
-        initLight();
-        drawableObject.getTransformation().transform(shaderProgram.getId(), glm::vec3(0.0f, -2.0f, 0.f), 0);
-        drawableObject.draw();
+        for (auto &object : drawableObjects)
+        {
+            object.initDrawableObject(object.getShaderProgram(), object.getModel());
+            initLight(object.getShaderProgram());
+            object.getTransformation().transform(object.getShaderProgram().getId(), glm::vec3(0.0f, 0.0f, -2.f), angle);
+            object.draw(object.getModel().getPointsCount());
+        }
 
         angle += 0.1f;
         glfwPollEvents();
@@ -101,7 +84,7 @@ void Scene::run()
     }
 };
 
-void Scene::initLight()
+void Scene::initLight(ShaderProgram shaderProgram)
 {
 
     // Získání umístění uniformních proměnných
@@ -125,7 +108,12 @@ void Scene::initLight()
     glUniform3fv(viewPosLoc, 1, glm::value_ptr(cameraPos));
 }
 
-void Scene::clean()
+void Scene::addDrawableObject(DrawableObject drawableObject)
+{
+    drawableObjects.push_back(drawableObject);
+}
+
+void Scene::clean(ShaderProgram shaderProgram)
 {
     glBindVertexArray(0);
     glDeleteProgram(shaderProgram.getId());
