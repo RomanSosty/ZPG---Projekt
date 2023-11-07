@@ -2,6 +2,12 @@
 
 int main()
 {
-    Application app;
+    Application *app = new Application();
+
+    app->createShaders();
+    app->createModels();
+    app->run();
+    app->cleanApp();
+
     return 0;
 }

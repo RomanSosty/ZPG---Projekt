@@ -78,7 +78,7 @@ void Scene::run()
             matrixID = glGetUniformLocation(object.getShaderProgram(), "project");
             glUniformMatrix4fv(matrixID, 1, GL_FALSE, glm::value_ptr(M));
 
-            object.setObjectColor();
+            object.initObjectColor();
 
             glBindVertexArray(object.getModel().getVao());
             glDrawArrays(GL_TRIANGLES, 0, 5824);
