@@ -49,42 +49,42 @@ bool Scene::initWindow()
 
 void Scene::run()
 {
-    GLfloat angle;
+
+    Camera *camera = new Camera();
+    addObserver(camera);
+
     glEnable(GL_DEPTH_TEST);
     while (!glfwWindowShouldClose(window))
     {
-
         glClearColor(0.07f, 0.13f, 0.17f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         for (DrawableObject &object : drawableObjects)
         {
-            glUseProgram(object.getShaderProgram());
 
+            glUseProgram(object.getShaderProgram());
             initLight(object.getShaderProgram());
 
             glm::mat4 M = glm::mat4(1.0f);
-            M = glm::translate(M, object.getTransformation());
+            M = object.getTransformation().getModelMatrix();
             matrixID = glGetUniformLocation(object.getShaderProgram(), "model");
             glUniformMatrix4fv(matrixID, 1, GL_FALSE, glm::value_ptr(M));
 
-            M = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
-            matrixID = glGetUniformLocation(object.getShaderProgram(), "view");
-            glUniformMatrix4fv(matrixID, 1, GL_FALSE, glm::value_ptr(M));
+            M = camera->getViewMatrix();
+            viewMatrixID = glGetUniformLocation(object.getShaderProgram(), "view");
+            glUniformMatrix4fv(viewMatrixID, 1, GL_FALSE, glm::value_ptr(M));
 
             M = glm::perspective(45.0f, 800.f / 600.f, 0.1f, 100.0f);
             matrixID = glGetUniformLocation(object.getShaderProgram(), "project");
             glUniformMatrix4fv(matrixID, 1, GL_FALSE, glm::value_ptr(M));
 
-            int objectColorLoc = glGetUniformLocation(object.getShaderProgram(), "objectColor");
-            glUniform3fv(objectColorLoc, 1, glm::value_ptr(object.getColor()));
+            object.setObjectColor();
 
             glBindVertexArray(object.getModel().getVao());
-
             glDrawArrays(GL_TRIANGLES, 0, 5824);
         }
 
-        cameraMove();
+        updateCameras();
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
@@ -92,8 +92,6 @@ void Scene::run()
 
 void Scene::initLight(GLuint shaderProgram)
 {
-
-    // Získání umístění uniformních proměnných
     int lightPosLoc = glGetUniformLocation(shaderProgram, "lightPos");
     int lightSuziPosLoc = glGetUniformLocation(shaderProgram, "lightSuziPos");
     int lightColorLoc = glGetUniformLocation(shaderProgram, "lightColor");
@@ -112,28 +110,21 @@ void Scene::addDrawableObject(DrawableObject drawableObject)
     drawableObjects.push_back(drawableObject);
 }
 
+void Scene::addObserver(Camera *camera)
+{
+    cameras.push_back(camera);
+}
+
+void Scene::updateCameras()
+{
+    for (Camera *camera : cameras)
+    {
+        camera->cameraMove(window);
+    }
+}
+
 void Scene::clean()
 {
     glfwDestroyWindow(window);
     glfwTerminate();
-}
-
-void Scene::cameraMove()
-{
-    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-    {
-        cameraPos += cameraSpeed * cameraFront; // Pohyb dopředu
-    }
-    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-    {
-        cameraPos -= cameraSpeed * cameraFront; // Pohyb zpět
-    }
-    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-    {
-        cameraPos -= glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed; // Pohyb doleva
-    }
-    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-    {
-        cameraPos += glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed; // Pohyb doprava
-    }
 }

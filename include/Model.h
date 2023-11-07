@@ -13,6 +13,7 @@ class Model
 {
 public:
     Model(){};
+    ~Model(){};
     Model(const float *points, int pointsCount);
     GLuint getVao();
     GLuint getVbo();

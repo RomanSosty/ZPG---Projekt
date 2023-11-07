@@ -12,14 +12,13 @@
 class Transformation
 {
 public:
-    void transform(GLuint shaderProgram, glm::vec3 translationVector, float angle);
-    void setVector(glm::vec3 transformation);
-    glm::vec3 getVector();
+    Transformation(){};
+    ~Transformation(){};
+    Transformation(glm::vec3 position);
+    glm::mat4 getModelMatrix();
 
 private:
     glm::mat4 M;
-    glm::vec3 transformation;
-    GLint matrixID;
 };
 
 #endif

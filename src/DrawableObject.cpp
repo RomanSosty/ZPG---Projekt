@@ -1,6 +1,6 @@
 #include "../include/DrawableObject.h"
 
-DrawableObject::DrawableObject(GLuint shaderProgram, Model model, glm::vec3 transformation, GLfloat angle, glm::vec3 objectColor)
+DrawableObject::DrawableObject(GLuint shaderProgram, Model model, Transformation transformation, GLfloat angle, glm::vec3 objectColor)
 {
     this->shaderProgram = shaderProgram;
     this->transformation = transformation;
@@ -9,17 +9,12 @@ DrawableObject::DrawableObject(GLuint shaderProgram, Model model, glm::vec3 tran
     this->objectColor = objectColor;
 }
 
-void DrawableObject::draw(int pointsCount)
-{
-    glDrawArrays(GL_TRIANGLES, 0, pointsCount);
-}
-
 Model DrawableObject::getModel()
 {
     return this->model;
 }
 
-glm::vec3 DrawableObject::getTransformation()
+Transformation DrawableObject::getTransformation()
 {
     return this->transformation;
 }
@@ -34,7 +29,8 @@ GLfloat DrawableObject::getAngle()
     return this->angle;
 }
 
-glm::vec3 DrawableObject::getColor()
+void DrawableObject::setObjectColor()
 {
-    return this->objectColor;
+    int objectColorLoc = glGetUniformLocation(getShaderProgram(), "objectColor");
+    glUniform3fv(objectColorLoc, 1, glm::value_ptr(this->objectColor));
 }
