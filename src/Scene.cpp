@@ -31,7 +31,7 @@ bool Scene::initWindow()
         glfwTerminate();
         return false;
     }
-    // musíme říct co chceme používat
+
     glfwMakeContextCurrent(window);
     glfwSwapInterval(1);
 
@@ -47,39 +47,78 @@ bool Scene::initWindow()
     return true;
 }
 
-ShaderProgram Scene::createShaderProgram()
+void Scene::createShaderProgram(GLuint id)
 {
-    ShaderProgram *shaderProgram = new ShaderProgram();
-    return *shaderProgram;
+    ShaderProgram *shaderProgram = new ShaderProgram(id);
+    mapShaderProgram[id] = shaderProgram;
+};
+
+ShaderProgram Scene::getShaderProgram(GLuint id)
+{
+    if (mapShaderProgram.find(id) != mapShaderProgram.end())
+    {
+        return *mapShaderProgram[id];
+    }
+    else
+    {
+        printf("ShaderProgram nenalezen");
+        return 0;
+    }
 };
 
 DrawableObject Scene::createDrawableObject()
 {
     DrawableObject *drawableObject = new DrawableObject();
     return *drawableObject;
-}
+};
 
 void Scene::run()
 {
     GLfloat angle;
-
     glEnable(GL_DEPTH_TEST);
+
     while (!glfwWindowShouldClose(window))
     {
-
+        glfwPollEvents();
         glClearColor(0.07f, 0.13f, 0.17f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+        if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+        {
+            cameraPos += cameraSpeed * cameraFront; // Pohyb dopředu
+        }
+        if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+        {
+            cameraPos -= cameraSpeed * cameraFront; // Pohyb zpět
+        }
+        if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+        {
+            cameraPos -= glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed; // Pohyb doleva
+        }
+        if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+        {
+            cameraPos += glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed; // Pohyb doprava
+        }
+
+        view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
+
         for (auto &object : drawableObjects)
         {
-            object.initDrawableObject(object.getShaderProgram(), object.getModel());
+            Transformation transformation = object.getTransformation();
+            glUseProgram(object.getShaderProgram().getId());
+            glBindVertexArray(object.getModel().getVao());
             initLight(object.getShaderProgram());
-            object.getTransformation().transform(object.getShaderProgram().getId(), glm::vec3(0.0f, 0.0f, -2.f), angle);
+
+            GLint viewLoc = glGetUniformLocation(object.getShaderProgram().getId(), "view");
+            glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
+
+            transformation.transform(object.getShaderProgram().getId(), transformation.getVector(), object.getAngle());
+
             object.draw(object.getModel().getPointsCount());
         }
 
         angle += 0.1f;
-        glfwPollEvents();
+
         glfwSwapBuffers(window);
     }
 };
@@ -95,10 +134,10 @@ void Scene::initLight(ShaderProgram shaderProgram)
     int viewPosLoc = glGetUniformLocation(shaderProgram.getId(), "viewPos");
 
     // Nastavení hodnot uniformních proměnných
-    glm::vec3 lightPos = glm::vec3(0.0f, 0.0f, 0.0f);
+    glm::vec3 lightPos = glm::vec3(0.0f, 0.0f, 1.0f);
     glm::vec3 lightColor = glm::vec3(1.0f, 1.0f, 1.0f);
     glm::vec3 objectColor = glm::vec3(0.5f, 0.5f, 0.5f);
-    glm::vec3 cameraPos = glm::vec3(5.0f, 0.0f, 0.f);
+    glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 0.f);
     float shininessValue = 32.0f;
 
     glUniform3fv(lightPosLoc, 1, glm::value_ptr(lightPos));

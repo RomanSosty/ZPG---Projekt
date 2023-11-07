@@ -1,5 +1,12 @@
 #include "../include/ShaderProgram.h"
 
+ShaderProgram::ShaderProgram(GLuint id)
+{
+    this->id = id;
+    createShaders();
+    setShaders();
+}
+
 void ShaderProgram::setShaders()
 {
     glAttachShader(this->id, vertexShader);
@@ -17,9 +24,4 @@ void ShaderProgram::createShaders()
 GLuint ShaderProgram::getId()
 {
     return this->id;
-}
-
-void ShaderProgram::setId()
-{
-    this->id = glCreateProgram();
 }

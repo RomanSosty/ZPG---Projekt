@@ -5,7 +5,7 @@ void Model::initModel(float *points, int pointsCount)
     this->pointsCount = pointsCount;
     glGenBuffers(1, &this->vbo);
     glBindBuffer(GL_ARRAY_BUFFER, this->vbo);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * pointsCount, points, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(float) * pointsCount, points, GL_STATIC_DRAW);
 
     glGenVertexArrays(1, &this->vao);
     glBindVertexArray(this->vao);

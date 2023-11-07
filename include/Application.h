@@ -6,6 +6,7 @@
 class Application
 {
 public:
+    Application();
     Scene createScene();
     void cleanApp(Scene scene, ShaderProgram shaderProgram);
 };

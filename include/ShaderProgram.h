@@ -6,10 +6,11 @@
 class ShaderProgram
 {
 public:
+    ShaderProgram(){};
+    ShaderProgram(GLuint id);
     GLuint getId();
     void setShaders();
     void createShaders();
-    void setId();
 
 private:
     GLuint id;
