@@ -1,6 +1,6 @@
 #include "../include/DrawableObject.h"
 
-DrawableObject::DrawableObject(GLuint shaderProgram, Model model, Transformation transformation, glm::vec3 objectColor)
+DrawableObject::DrawableObject(GLuint shaderProgram, Model model, Transformation *transformation, glm::vec3 objectColor)
 {
     this->shaderProgram = shaderProgram;
     this->transformation = transformation;
@@ -13,7 +13,7 @@ Model DrawableObject::getModel()
     return this->model;
 }
 
-Transformation DrawableObject::getTransformation()
+Transformation *DrawableObject::getTransformation()
 {
     return this->transformation;
 }

@@ -66,7 +66,7 @@ void Scene::run()
             initLight(object.getShaderProgram());
 
             glm::mat4 M = glm::mat4(1.0f);
-            M = object.getTransformation().getModelMatrix();
+            M = object.getTransformation()->getModelMatrix();
             matrixID = glGetUniformLocation(object.getShaderProgram(), "model");
             glUniformMatrix4fv(matrixID, 1, GL_FALSE, glm::value_ptr(M));
 
@@ -82,6 +82,8 @@ void Scene::run()
 
             glBindVertexArray(object.getModel().getVao());
             glDrawArrays(GL_TRIANGLES, 0, 5824);
+
+            object.getTransformation()->updateAngle();
         }
 
         updateCameras();

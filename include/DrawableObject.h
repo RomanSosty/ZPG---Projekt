@@ -10,16 +10,16 @@ class DrawableObject
 public:
     DrawableObject(){};
     ~DrawableObject(){};
-    DrawableObject(GLuint shaderProgram, Model model, Transformation transformation, glm::vec3 objectColor);
+    DrawableObject(GLuint shaderProgram, Model model, Transformation *transformation, glm::vec3 objectColor);
 
     void initObjectColor();
 
     GLuint getShaderProgram();
     Model getModel();
-    Transformation getTransformation();
+    Transformation *getTransformation();
 
 private:
-    Transformation transformation;
+    Transformation *transformation;
     Model model;
     GLuint shaderProgram;
     glm::vec3 objectColor;
