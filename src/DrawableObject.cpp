@@ -1,11 +1,12 @@
 #include "../include/DrawableObject.h"
 
-void DrawableObject::initDrawableObject(ShaderProgram shaderProgram, Model model, Transformation transformation, GLfloat angle)
+DrawableObject::DrawableObject(GLuint shaderProgram, Model model, glm::vec3 transformation, GLfloat angle, glm::vec3 objectColor)
 {
     this->shaderProgram = shaderProgram;
     this->transformation = transformation;
     this->model = model;
     this->angle = angle;
+    this->objectColor = objectColor;
 }
 
 void DrawableObject::draw(int pointsCount)
@@ -13,30 +14,17 @@ void DrawableObject::draw(int pointsCount)
     glDrawArrays(GL_TRIANGLES, 0, pointsCount);
 }
 
-Model DrawableObject::createModel(float *points, int pointsCount)
-{
-    Model model = Model();
-    model.initModel(points, pointsCount);
-    return model;
-}
-
 Model DrawableObject::getModel()
 {
     return this->model;
 }
 
-Transformation DrawableObject::createTransformation()
-{
-    Transformation transformation = Transformation();
-    return transformation;
-}
-
-Transformation DrawableObject::getTransformation()
+glm::vec3 DrawableObject::getTransformation()
 {
     return this->transformation;
 }
 
-ShaderProgram DrawableObject::getShaderProgram()
+GLuint DrawableObject::getShaderProgram()
 {
     return this->shaderProgram;
 };
@@ -44,4 +32,9 @@ ShaderProgram DrawableObject::getShaderProgram()
 GLfloat DrawableObject::getAngle()
 {
     return this->angle;
+}
+
+glm::vec3 DrawableObject::getColor()
+{
+    return this->objectColor;
 }

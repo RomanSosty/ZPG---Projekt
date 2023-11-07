@@ -3,31 +3,29 @@
 
 #include "../include/Model.h"
 #include "../include/Transformation.h"
-#include "../include/ShaderProgram.h"
 #include <map>
 
 class DrawableObject
 {
 public:
     DrawableObject(){};
-    ShaderProgram getShaderProgram();
-    void initDrawableObject(ShaderProgram shaderProgram, Model model, Transformation transformation, GLfloat angle);
+    DrawableObject(GLuint shaderProgram, Model model, glm::vec3 transformation, GLfloat angle, glm::vec3 objectColor);
     void draw(int pointsCount);
+    GLuint getShaderProgram();
 
-    Model createModel(float *points, int pointsCount);
     Model getModel();
 
-    Transformation createTransformation();
-    Transformation getTransformation();
+    glm::vec3 getTransformation();
+    glm::vec3 getColor();
 
     GLfloat getAngle();
 
 private:
-    Transformation transformation;
+    glm::vec3 transformation;
     Model model;
-    ShaderProgram shaderProgram;
+    GLuint shaderProgram;
 
     GLfloat angle;
-    std::map<GLuint, ShaderProgram *> mapShaderProgram;
+    glm::vec3 objectColor;
 };
 #endif
