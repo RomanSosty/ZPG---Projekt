@@ -1,4 +1,4 @@
-OpenGL in C++
+# OpenGL in C++
 
 The program can be created using the Makefile file, which is stored in the bin directory.
 When the make command is executed, an executable file called main is created in the bin directory.
